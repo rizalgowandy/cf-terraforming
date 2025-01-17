@@ -79,10 +79,8 @@ func TestGenerate_writeAttrLine(t *testing.T) {
 
 func TestGenerate_ResourceNotSupported(t *testing.T) {
 	output, err := executeCommandC(rootCmd, "generate", "--resource-type", "notreal")
-
-	if assert.Nil(t, err) {
-		assert.Contains(t, output, "\"notreal\" is not yet supported for automatic generation")
-	}
+	assert.Nil(t, err)
+	assert.Equal(t, output, `"notreal" is not yet supported for automatic generation`)
 }
 
 func TestResourceGeneration(t *testing.T) {
@@ -102,6 +100,7 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare account member":                          {identiferType: "account", resourceType: "cloudflare_account_member", testdataFilename: "cloudflare_account_member"},
 		"cloudflare api shield":                              {identiferType: "zone", resourceType: "cloudflare_api_shield", testdataFilename: "cloudflare_api_shield"},
 		"cloudflare argo":                                    {identiferType: "zone", resourceType: "cloudflare_argo", testdataFilename: "cloudflare_argo"},
+		"cloudflare bot management":                          {identiferType: "zone", resourceType: "cloudflare_bot_management", testdataFilename: "cloudflare_bot_management"},
 		"cloudflare BYO IP prefix":                           {identiferType: "account", resourceType: "cloudflare_byo_ip_prefix", testdataFilename: "cloudflare_byo_ip_prefix"},
 		"cloudflare certificate pack":                        {identiferType: "zone", resourceType: "cloudflare_certificate_pack", testdataFilename: "cloudflare_certificate_pack_acm"},
 		"cloudflare custom hostname fallback origin":         {identiferType: "zone", resourceType: "cloudflare_custom_hostname_fallback_origin", testdataFilename: "cloudflare_custom_hostname_fallback_origin"},
@@ -111,6 +110,10 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare filter":                                  {identiferType: "zone", resourceType: "cloudflare_filter", testdataFilename: "cloudflare_filter"},
 		"cloudflare firewall rule":                           {identiferType: "zone", resourceType: "cloudflare_firewall_rule", testdataFilename: "cloudflare_firewall_rule"},
 		"cloudflare health check":                            {identiferType: "zone", resourceType: "cloudflare_healthcheck", testdataFilename: "cloudflare_healthcheck"},
+		"cloudflare list (asn)":                              {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_asn"},
+		"cloudflare list (hostname)":                         {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_hostname"},
+		"cloudflare list (ip)":                               {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_ip"},
+		"cloudflare list (redirect)":                         {identiferType: "account", resourceType: "cloudflare_list", testdataFilename: "cloudflare_list_redirect"},
 		"cloudflare load balancer monitor":                   {identiferType: "account", resourceType: "cloudflare_load_balancer_monitor", testdataFilename: "cloudflare_load_balancer_monitor"},
 		"cloudflare load balancer pool":                      {identiferType: "account", resourceType: "cloudflare_load_balancer_pool", testdataFilename: "cloudflare_load_balancer_pool"},
 		"cloudflare load balancer":                           {identiferType: "zone", resourceType: "cloudflare_load_balancer", testdataFilename: "cloudflare_load_balancer"},
@@ -139,11 +142,19 @@ func TestResourceGeneration(t *testing.T) {
 		"cloudflare ruleset (rewrite to empty query string)": {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone_rewrite_to_empty_query_parameter"},
 		"cloudflare ruleset":                                 {identiferType: "zone", resourceType: "cloudflare_ruleset", testdataFilename: "cloudflare_ruleset_zone"},
 		"cloudflare spectrum application":                    {identiferType: "zone", resourceType: "cloudflare_spectrum_application", testdataFilename: "cloudflare_spectrum_application"},
+		"cloudflare teams list":                              {identiferType: "account", resourceType: "cloudflare_teams_list", testdataFilename: "cloudflare_teams_list"},
+		"cloudflare teams location":                          {identiferType: "account", resourceType: "cloudflare_teams_location", testdataFilename: "cloudflare_teams_location"},
+		"cloudflare teams proxy endpoint":                    {identiferType: "account", resourceType: "cloudflare_teams_proxy_endpoint", testdataFilename: "cloudflare_teams_proxy_endpoint"},
+		"cloudflare teams rule":                              {identiferType: "account", resourceType: "cloudflare_teams_rule", testdataFilename: "cloudflare_teams_rule"},
 		"cloudflare tunnel":                                  {identiferType: "account", resourceType: "cloudflare_tunnel", testdataFilename: "cloudflare_tunnel"},
 		"cloudflare turnstile_widget":                        {identiferType: "account", resourceType: "cloudflare_turnstile_widget", testdataFilename: "cloudflare_turnstile_widget"},
+		"cloudflare turnstile_widget_no_domains":             {identiferType: "account", resourceType: "cloudflare_turnstile_widget", testdataFilename: "cloudflare_turnstile_widget_no_domains"},
 		"cloudflare url normalization settings":              {identiferType: "zone", resourceType: "cloudflare_url_normalization_settings", testdataFilename: "cloudflare_url_normalization_settings"},
 		"cloudflare user agent blocking rule":                {identiferType: "zone", resourceType: "cloudflare_user_agent_blocking_rule", testdataFilename: "cloudflare_user_agent_blocking_rule"},
 		"cloudflare waiting room":                            {identiferType: "zone", resourceType: "cloudflare_waiting_room", testdataFilename: "cloudflare_waiting_room"},
+		"cloudflare waiting room event":                      {identiferType: "zone", resourceType: "cloudflare_waiting_room_event", testdataFilename: "cloudflare_waiting_room_event"},
+		"cloudflare waiting room rules":                      {identiferType: "zone", resourceType: "cloudflare_waiting_room_rules", testdataFilename: "cloudflare_waiting_room_rules"},
+		"cloudflare waiting room settings":                   {identiferType: "zone", resourceType: "cloudflare_waiting_room_settings", testdataFilename: "cloudflare_waiting_room_settings"},
 		"cloudflare worker route":                            {identiferType: "zone", resourceType: "cloudflare_worker_route", testdataFilename: "cloudflare_worker_route"},
 		"cloudflare workers kv namespace":                    {identiferType: "account", resourceType: "cloudflare_workers_kv_namespace", testdataFilename: "cloudflare_workers_kv_namespace"},
 		"cloudflare zone lockdown":                           {identiferType: "zone", resourceType: "cloudflare_zone_lockdown", testdataFilename: "cloudflare_zone_lockdown"},
